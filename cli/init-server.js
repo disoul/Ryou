@@ -13,6 +13,10 @@ async function init() {
   console.log('[Ryou]Install Ryou in current dir...');
   try {
     await pify(fs.mkdir)(path.resolve(process.cwd(), 'Ryou'));
+    let serverConfig = {
+      ryouPath: path.resolve(process.cwd(), 'Ryou'),
+    };
+    await pify(fs.writeFile)('.ryourc', serverConfig.toString());
     console.log('[Ryou]Ryou create finish, please run "ryou run" in Ryou');
   } catch(err) {
     console.error('[Ryou]Create Error', err);

@@ -10,6 +10,10 @@
   "license": "MIT",
   "dependencies": {
     "commander": "^2.9.0",
-    "koa": "^1.2.4"
+    "inquirer": "^1.2.2",
+    "koa": "^1.2.4",
+    "mongoose": "^4.6.5",
+    "pify": "^2.3.0",
+    "ssh2": "^0.5.2"
   }
 }

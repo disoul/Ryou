@@ -10,9 +10,7 @@ const path = require('path');
 const conn = new require('ssh2').Client();
 const process = require('process');
 const cprocess = require('child_process');
-const exec = require('child-process-promise').exec;
 const inquirer = require('inquirer');
-const streamToPromise = require('stream-to-promise');
 
 const questions = [
   {
