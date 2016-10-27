@@ -75,6 +75,8 @@ function streamPromise(stream) {
       });
     }).on('data', chunk => {
       data += chunk;
+    }).stderr.on('data', err => {
+      reject(err);
     });
   });
 }
@@ -110,54 +112,60 @@ async function getPublicKey() {
 }
 
 function ssh(options) {
-  conn.on('ready', async () => {
-    console.log('[Ryou]SSH client ready');
+  return new Promise((resolve, reject) => {
+    conn.on('ready', async () => {
+      console.log('[Ryou]SSH client ready');
 
-    // get server config
-    try {
-      let stream = await execPromise(conn, 'cat .ryourc');
-      let res = await streamPromise(stream);
-      if (res.code !== 0) {
-        console.error('[Ryou] Can not find .ryourc in server\nrun ryou init server in your server first');
-        process.exit(1);
-      } else {
-        let serverConfig = JSON.parse(res.data);
+      // get server config
+      try {
+        let stream = await execPromise(conn, 'cat .ryourc');
+        let res = await streamPromise(stream);
+        if (res.code !== 0) {
+          console.error('[Ryou] Can not find .ryourc in server\nrun ryou init server in your server first');
+          process.exit(1);
+        } else {
+          let serverConfig = JSON.parse(res.data);
+        }
+      } catch(err) {
+        console.error('ERROR', err);
       }
-    } catch(err) {
-      console.error('ERROR', err);
-    }
 
-    console.log('[Ryou] config ssh publi key..');
-    // copy public key to server
-    try {
-      let publicKeyPath = await getPublicKey();
-      clientConfig.publicKey = publicKeyPath;
-      let publicKey = await pify(fs.readFile, 'utf8')(publickKeyPath);
-      let stream = await execPromise(conn, 'echo ' + publickKey + ' >> ~/.ssh/authorized_keys');
-      let res = await streamPromise(stream);
-      if (res.code !== 0) {
-        console.error('[Ryou]copy public key to server error', res);
-        process.exit(1);
-      } else {
-        console.log('[Ryou]ssh public key copy finished');       
+      console.log('[Ryou] config ssh public key..');
+      // copy public key to server
+      try {
+        let publicKeyPath = await getPublicKey();
+        clientConfig.publicKey = publicKeyPath;
+        let publicKey = await pify(fs.readFile, {encoding: 'utf8'})(publicKeyPath);
+        let stream = await execPromise(conn, "sed -i '$a\\" + publicKey + "' ~/.ssh/authorized_keys");
+        let res = await streamPromise(stream);
+        console.log('[Ryou]copy public key to server successful');
+        conn.end();
+        resolve();
+      } catch(err) {
+        console.error('Error!', err.toString());
       }
-    } catch(err) {
-      console.error(err);
-    }
-  }).connect({
-    host: options.host,
-    port: 22,
-    username: options.user,
-    password: options.password
-  }); 
+    }).connect({
+      host: options.host,
+      port: 22,
+      username: options.user,
+      password: options.password
+    }); 
+  });
 }
 
 async function init() {
   try {
     let answer = await inquirer.prompt(questions);
-    ssh(answer);
+    await ssh(answer);
+
+    clientConfig.host = answer.host;
+    clientConfig.user = answer.user;
+
+    console.log('[Ryou]Write .ryourc file...');
+    await pify(fs.writeFile)(path.resolve(process.env.HOME, '.ryourc'), JSON.stringify(clientConfig));
+    console.log('[Ryou]Init success!');
   } catch(err) {
-    console.err(err)
+    console.error(err)
   }
 }
 
