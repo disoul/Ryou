@@ -12,6 +12,11 @@ const process = require('process');
 const utils = require('../utils/');
 
 async function createUser(options, user) {
+  if (user == undefined) {
+    user = options;
+    options = undefined;
+  }
+
   try {
     const config = options || await utils.getConfig();
     const conn = await utils.sshPromise(config);
