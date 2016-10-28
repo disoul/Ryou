@@ -23,8 +23,8 @@ async function createUser(options, user) {
     console.log('connect');
     const stream = await utils.execPromise(conn, 'ryou-server user add ' + user);
     const res = await utils.streamPromise(stream);
-    conn.end();
     console.log(res);
+    conn.end();
   } catch(err) {
     console.error('[ryou]create user error', err.toString());
   }

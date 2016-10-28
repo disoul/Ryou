@@ -53,6 +53,7 @@ function execPromise(conn, exec, options) {
 function streamPromise(stream) {
   return new Promise((resolve, reject) => {
     let data = '';
+    let err = '';
     stream.setEncoding('utf8');
     stream.on('close', (code, signal) => {
       resolve({
@@ -62,7 +63,12 @@ function streamPromise(stream) {
       });
     }).on('data', chunk => {
       data += chunk;
-    }).stderr.on('data', err => {
+    });
+    stream.stderr.setEncoding('utf8');
+    stream.stderr.on('data', chunk => {
+      err += chunk;
+    });
+    stream.stderr.on('close', () => {
       reject(err);
     });
   });
