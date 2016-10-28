@@ -44,9 +44,20 @@ function execPromise(conn, exec, options) {
     } else {
       conn.exec(exec, (err, stream) => {
         if (err) reject(err);
+        stream.setEncoding('utf8');
         resolve(stream);
       })
     }
+  });
+}
+
+function shellPromise(conn) {
+  return new Promise((resolve, reject) => {
+    conn.shell((err, stream) => {
+      if (err) reject(err);
+      stream.setEncoding('utf8');
+      resolve(stream);
+    });
   });
 }
 
@@ -104,6 +115,7 @@ module.exports = {
   checkConfig: checkConfig,
   getConfig: getConfig,
   execPromise: execPromise,
+  shellPromise: shellPromise,
   streamPromise: streamPromise,
   sshPromise: sshPromise,
 };

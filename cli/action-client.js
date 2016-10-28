@@ -21,10 +21,10 @@ async function createUser(options, user) {
     const config = options || await utils.getConfig();
     const conn = await utils.sshPromise(config);
     console.log('connect');
-    const stream = await utils.execPromise(conn, 'ryou-server user add ' + user);
+    const stream = await utils.shellPromise(conn);
+    stream.end('ryou-server user add disoul\nexit\n');
     const res = await utils.streamPromise(stream);
-    console.log(res);
-    conn.end();
+    console.log(res.data);
   } catch(err) {
     console.error('[ryou]create user error', err.toString());
   }
