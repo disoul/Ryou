@@ -12,7 +12,7 @@ var Schema = mongoose.Schema;
 mongoose.connect('mongodb://localhost/ryou');
 
 var userSchema = new Schema({
-  name: String,
+  name: { type: String, unique: true },
   projects: [{
     name: String,
   }],
