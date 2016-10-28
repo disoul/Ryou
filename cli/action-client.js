@@ -20,14 +20,16 @@ async function createUser(options, user) {
   try {
     const config = options || await utils.getConfig();
     const conn = await utils.sshPromise(config);
-
+    console.log('connect');
     const stream = await utils.execPromise(conn, 'ryou-server user add ' + user);
     const res = await utils.streamPromise(stream);
     conn.end();
     console.log(res);
   } catch(err) {
-    console.error('[ryou]create user error', err);
+    console.error('[ryou]create user error', err.toString());
   }
 }
 
-createUser();
+module.exports = {
+  createUser: createUser,
+}

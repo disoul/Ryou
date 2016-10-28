@@ -18,13 +18,13 @@ cmd
   .action(target => {
     clientInit();
   });
-
 cmd
-  .command('user [action] [username]', 'action: add | remove')
-  .action((action, username) => {
+  .command('user <action> <user>')
+  .action((action, user) => {
+    console.log(action, user);
     switch(action) {
       case 'add':
-        actions.createUser(username);
+        actions.createUser(user);
         break;
       default:
         break;
