@@ -16,7 +16,7 @@ async function init() {
     let serverConfig = {
       ryouPath: path.resolve(process.cwd(), 'Ryou'),
     };
-    await pify(fs.writeFile)('.ryourc', serverConfig.toString());
+    await pify(fs.writeFile)('.ryourc', JSON.stringify(serverConfig));
     console.log('[Ryou]Ryou create finish, please run "ryou run" in Ryou');
   } catch(err) {
     console.error('[Ryou]Create Error', err);
