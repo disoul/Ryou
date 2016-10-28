@@ -30,15 +30,16 @@ cmd
   });
 
 cmd
-  .comand('user <action> <user>')
-  .action((action, user) => {
+  .command('user <action> <user>')
+  .action(async (action, user) => {
     switch(action) {
       case 'add':
-        actions.createUser(user);
+        await actions.createUser(user);
         break;
       default:
         break;
     }
+    process.exit(0);
   });
 
 cmd.parse(process.argv);
