@@ -93,7 +93,9 @@ async function sshPromise(options) {
         name: 'passphrase',
         message: 'input your ssh privateKey passphrase'
       }]);
-      options.passphrase = answer.passphrase;
+      if (answer.passphrase === '') {
+        options.passphrase = answer.passphrase;
+      }
     } catch(err) {
       console.error(err);
     }
