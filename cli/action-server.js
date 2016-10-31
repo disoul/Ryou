@@ -12,10 +12,6 @@ const process = require('process');
 const utils = require('../utils/');
 
 async function createUser(username) {
-  let user = new User({
-    name: username,
-    projects: [],
-  });
   try {
     let config = await utils.getConfig();
     await pify(fs.mkdir)(path.resolve(config.ryouPath, username));
@@ -26,6 +22,18 @@ async function createUser(username) {
   }
 }
 
+async function addProject(user, path) {
+  try {
+    let config = await utils.getConfig();
+    await pify(fs.mkdir)(path.resolve(config.ryouPath, user, path));
+    console.log('[Ryou] project floder created, finish');
+    return;
+  } catch(err) {
+    console.error('[Ryou] addProject error', err);
+  }
+}
+
 module.exports = {
   createUser: createUser,
+  addProject: addProject,
 };

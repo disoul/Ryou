@@ -34,15 +34,16 @@ cmd
   });
 
 cmd
-  .command('project <action> <name>')
-  .action(async (action, name) => {
+  .command('project <action> <name> [path]')
+  .action(async (action, name, path) => {
     switch(action) {
       case 'add':
-        await actions.addProject(name);
+        await actions.addProject(name, path);
         break;
       default:
         break;
     }
+    process.exit(0);
   });
 
 cmd.parse(process.argv);

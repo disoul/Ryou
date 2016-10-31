@@ -42,4 +42,17 @@ cmd
     process.exit(0);
   });
 
+cmd
+  .command('project <action> <user> <name>')
+  .action(async (action, user, name) => {
+    switch(action) {
+      case 'add':
+        await action.addProject(user, name);
+        break;
+      default:
+        break;
+    }
+    process.exit(0);
+  })
+
 cmd.parse(process.argv);
