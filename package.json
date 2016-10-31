@@ -11,7 +11,8 @@
   "dependencies": {
     "commander": "^2.9.0",
     "inquirer": "^1.2.2",
-    "koa": "^1.2.4",
+    "koa": "^2.0.0",
+    "koa-router": "^7.0.1",
     "mongoose": "^4.6.5",
     "pify": "^2.3.0",
     "ssh2": "^0.5.2"
