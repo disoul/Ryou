@@ -18,6 +18,7 @@ cmd
   .action(target => {
     clientInit();
   });
+
 cmd
   .command('user <action> <user>')
   .action(async (action, user) => {
@@ -30,6 +31,18 @@ cmd
         break;
     }
     process.exit(0);
+  });
+
+cmd
+  .command('project <action> <name>')
+  .action(async (action, name) => {
+    switch(action) {
+      case 'add':
+        await actions.addProject(name);
+        break;
+      default:
+        break;
+    }
   });
 
 cmd.parse(process.argv);

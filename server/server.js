@@ -12,8 +12,6 @@ var app = new koa();
 var pify = require('pify');
 var process = require('process');
 
-var User = require('./mongo/mongo.js');
-
 var options = {
   port: process.env.RYOU_PORT || 8008,
 }
@@ -22,16 +20,6 @@ var options = {
 router
   .get('/:user/:project', async (ctx, next) => {
     console.log(next);
-    let user = new User({
-      name: ctx.params.user,
-      projects: [],
-    });
-    try {
-      let data = await pify(user.save)();
-      console.log(data, 'save success');
-    } catch (err) {
-      console.err(err);
-    }
   })
 
 app
