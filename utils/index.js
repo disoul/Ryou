@@ -88,7 +88,7 @@ function streamPromise(stream) {
 async function sshPromise(options) {
   if (!options.passphrase) {
     try {
-      let answer = await inquirer.prompt([{
+      var answer = await inquirer.prompt([{
         type: 'password',
         name: 'passphrase',
         message: 'input your ssh privateKey passphrase'
@@ -107,7 +107,7 @@ async function sshPromise(options) {
         port: 22,
         username: options.user,
         privateKey: fs.readFileSync(options.privateKey),
-        passphrase: options.passphrase,
+        passphrase: answer.passphrase,
       });
     });
   }

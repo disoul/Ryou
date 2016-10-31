@@ -38,6 +38,7 @@ const clientConfig = {
   privateKey: '',
   host: '',
   user: '',
+  remotePath: '',
 };
 
 async function getPublicKey() {
@@ -84,6 +85,7 @@ function ssh(options) {
           process.exit(1);
         } else {
           let serverConfig = JSON.parse(res.data);
+          clientConfig.remotePath = serverConfig.ryouPath;
         }
       } catch(err) {
         console.error('ERROR', err);

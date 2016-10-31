@@ -46,4 +46,10 @@ cmd
     process.exit(0);
   });
 
+cmd
+  .command('push [path]')
+  .action(async (path) => {
+    await actions.push(path);
+  })
+
 cmd.parse(process.argv);
