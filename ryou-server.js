@@ -47,7 +47,7 @@ cmd
   .action(async (action, user, name) => {
     switch(action) {
       case 'add':
-        await action.addProject(user, name);
+        await actions.addProject(user, name);
         break;
       default:
         break;

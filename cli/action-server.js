@@ -22,10 +22,10 @@ async function createUser(username) {
   }
 }
 
-async function addProject(user, path) {
+async function addProject(user, dir) {
   try {
     let config = await utils.getConfig();
-    await pify(fs.mkdir)(path.resolve(config.ryouPath, user, path));
+    await pify(fs.mkdir)(path.resolve(config.ryouPath, user, dir));
     console.log('[Ryou] project floder created, finish');
     return;
   } catch(err) {
