@@ -5,6 +5,7 @@
  * Distributed under terms of the MIT license.
  */
 'use strict';
+var fs = require('fs');
 var path = require('path');
 
 var koa = require('koa');
