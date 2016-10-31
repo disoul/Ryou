@@ -45,20 +45,25 @@ async function addProject(name, dir, options) {
     }
 
     config.projects = config.projects || {};
+
+    const conn = await utils.sshPromise(config);
+    console.log('connect');
+    const stream = await utils.shellPromise(conn);
+    stream.end('ryou-server project add ' + config.username + ' ' + name + '\nexit\n');
+    const res = await utils.streamPromise(stream);
+    console.log(res.data);
+  } catch(err) {
+    console.error('[ryou]add peoject error', err);
+  }
+
+  try {
     config.projects[name] = {
       username: config.username,
       path: path.resolve(process.cwd(), dir)
     };
     await pify(fs.writeFile)(path.resolve(process.env.HOME, '.ryourc'), JSON.stringify(config));
-
-    const conn = await utils.sshPromise(config);
-    console.log('connect');
-    const stream = await utils.shellPromise(conn);
-    stream.end('ryou-server project add ' + name + ' ' + path + '\nexit\n');
-    const res = await utils.streamPromise(stream);
-    console.log(res.data);
   } catch(err) {
-    console.error('[ryou]add peoject error', err);
+    console.error('[ryou]update config error', err);
   }
 }
 
