@@ -17,7 +17,12 @@ var options = {
   port: process.env.RYOU_PORT || 8008,
 }
 
-const config = await utils.getConfig(); 
+var config;
+ 
+app.use(async (next) => {
+  config  = await utils.getConfig();
+  await next;
+})
 
 router
   .get('/:user/:project', async (ctx, next) => {
