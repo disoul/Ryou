@@ -29,9 +29,13 @@ app.use(async (ctx, next) => {
 
 router
   .get(
+    'static',
     '/:user/:project/:file*',
     async (ctx) => {
     console.log(ctx.params);
+    if (!ctx.params.file) {
+        ctx.redirect(router.url('static', {user: ctx.params.user, project: ctx.params.project, file: 'index.html'}));
+    }
     let user = ctx.params.user;
     let project = ctx.params.project;
     let projectPath = path.resolve(ctx.config.ryouPath, user, project);
