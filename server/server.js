@@ -28,25 +28,15 @@ app.use(async (ctx, next) => {
 })
 
 router
-  .get('/:path*', async (ctx, next) => {
-    let matches = ctx.params.path.match(/(\.[^\/\.]+)$/);
-    console.log(matches);
-    
-    if (matches === null) {
-      await next();
-    } else {
-      console.log(ctx.request.url); 
-      console.log(ctx.request.origin); 
-    }
-  })
   .get(
-    '/:user/:project',
+    '/:user/:project/:file*',
     async (ctx) => {
     console.log(ctx.params);
     let user = ctx.params.user;
     let project = ctx.params.project;
     let projectPath = path.resolve(ctx.config.ryouPath, user, project);
-    ctx.body = await pify(fs.readFile)(path.resolve(projectPath, 'index.html'), {encoding:'utf8'});
+    let file = ctx.params.file ? ctx.params.file : 'index.html';
+    ctx.body = await pify(fs.readFile)(path.resolve(projectPath, file), {encoding:'utf8'});
   })
 
 app
