@@ -21,16 +21,28 @@ var options = {
 }
 
 var config;
- 
+
+app.use(async (ctx, next) => {
+  ctx.config  = await utils.getConfig();
+  await next();
+})
 
 router
-  .get('/:user/:project', async (ctx, next) => {
-      console.log(ctx, next);
-      ctx.config  = await utils.getConfig();
-      console.log(ctx.config);
+  .get('/:path*', async (ctx, next) => {
+    let matches = ctx.params.path.match(/(\.[^\/\.]+)$/);
+    console.log(matches);
+    
+    if (matches === null) {
       await next();
-    }, async (ctx) => {
-    console.log('12312');
+    } else {
+      console.log(ctx.request.url); 
+      console.log(ctx.request.origin); 
+    }
+  })
+  .get(
+    '/:user/:project',
+    async (ctx) => {
+    console.log(ctx.params);
     let user = ctx.params.user;
     let project = ctx.params.project;
     let projectPath = path.resolve(ctx.config.ryouPath, user, project);
