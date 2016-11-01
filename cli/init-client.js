@@ -39,6 +39,7 @@ const clientConfig = {
   host: '',
   user: '',
   remotePath: '',
+  ryouPort: '',
 };
 
 async function getPublicKey() {
@@ -85,6 +86,7 @@ function ssh(options) {
           process.exit(1);
         } else {
           let serverConfig = JSON.parse(res.data);
+          clientConfig.ryouPort = serverConfig.ryouPort;
           clientConfig.remotePath = serverConfig.ryouPath;
         }
       } catch(err) {

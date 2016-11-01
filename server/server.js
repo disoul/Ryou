@@ -44,5 +44,9 @@ app
   .use(router.allowedMethods());
 
 
+utils.getConfig().then(async (config) => {
+  config.ryouPort = options.port;
+  await pify(fs.writeFile)(path.resolve(process.env.HOME, '.ryourc'), JSON.stringify(config));
+});
 app.listen(options.port);
 console.log('listen on', options.port);

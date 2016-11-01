@@ -81,6 +81,10 @@ function pushProject(config, project) {
       (err, stdout, stderr) => {
         if (err) reject(err);
         console.log('[Ryou]finish!');
+        console.log(
+          '[Ryou]http://' + config.host + ':' + config.ryouPort + '/' +
+          config.username + '/' + project
+        );
         resolve({
           stdout: stdout,
           stderr: stderr,
